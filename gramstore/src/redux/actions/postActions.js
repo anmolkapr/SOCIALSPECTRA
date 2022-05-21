@@ -1,0 +1,39 @@
+import axios from "axios";
+import { message } from "antd";
+
+export const addPost = (values) => async dispatch => {
+  //attching other information to the sent values (user,likes,comments)
+  //converted to JSON from string 
+  values.user = JSON.parse(localStorage.getItem('user'))._id
+  values.likes = []
+  values.comments =[]
+  
+  
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    // successfully 
+    await axios.post("/api/posts/addpost", values);
+    dispatch({ type: "LOADING", payload: false });
+    message.success("Post Added Successfully");
+    
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "LOADING", payload: false });
+    message.error("Something Went Wrong");
+  }
+};
+
+export const getallposts = () => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    const response = await axios.get("/api/posts/getallposts");
+    dispatch({ type: "LOADING", payload: false });
+    dispatch({ type: "GET_ALL_POSTS", payload: response.data });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "LOADING", payload: false });
+    message.error("something went wrong");
+  }
+};
