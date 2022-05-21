@@ -1,14 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import moment from "moment"
 import {
-    HeartOutlined,
+    HeartFilled,
   CommentOutlined,
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { getallposts, likeorUnlikePost } from '../redux/actions/postActions';
+import { useDispatch, useSelector } from 'react-redux';
 
-function Post({post}) {
+function Post({ post }) {
+  const dispatch = useDispatch();
+    const currentuser = JSON.parse(localStorage.getItem("user"));
+    const alreadyLiked = post.likes.find(
+      (obj) => obj.user.toString() == currentuser._id
+    );
+  const { likeorUnlikeloading } = useSelector((state)=>state.alertsReducer);
+  
+  useEffect(() => {
+    
+    dispatch(getallposts())
+    
+  },[likeorUnlikeloading])
+  //if the value in the second argument is changed then the first function is executed
+  
+  
   return (
     <div className="bs1 p-2 mt-3">
       <div className="d-flex justify-content-between align-items-center">
@@ -41,13 +58,16 @@ function Post({post}) {
 
       <div className='d-flex align-items-center'>
           <div className='d-flex align-items-center mr-3'>
-              <HeartOutlined />
+          <HeartFilled
+            style={{color: alreadyLiked ? 'red' : 'grey'}}
+            onClick={() => { dispatch(likeorUnlikePost({ postid: post._id })) }} />
+               
               <p>{post.likes.length}</p>
           </div>
 
           <div className='d-flex align-items-center'>
               <CommentOutlined />
-              <p>{post.likes.length}</p>
+              <p>{post.comments.length}</p>
           </div>
           </div>
     </div>

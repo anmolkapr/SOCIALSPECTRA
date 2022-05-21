@@ -5,6 +5,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   UploadOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import './defaultLayout.css'
 import React from 'react';
@@ -30,7 +31,7 @@ class DefaultLayout extends React.Component {
         <Layout className="site-layout">
           <Header className="site-layout-background " style={{ padding: 0 }}>
             <div className='d-flex justify-content-between align-items-center bs1'>
-            <h4>Logged in User</h4>
+            <h4>{JSON.parse(localStorage.getItem('user')).username}</h4>
             <h2>Gram Store </h2>
             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
               className: 'trigger',
@@ -57,6 +58,10 @@ class DefaultLayout extends React.Component {
             </Menu.Item>
             <Menu.Item key= "/addpost" icon={<UploadOutlined />}>
             <Link to =  "/addpost">Add a post </Link>
+            </Menu.Item>
+
+            <Menu.Item icon={<LogoutOutlined />}>
+              <Link onClick={() => (localStorage.removeItem('user'), window.location.reload())}>Logout </Link>
             </Menu.Item>
           </Menu>
         </Sider>
