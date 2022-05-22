@@ -1,6 +1,7 @@
 const initialState = {
     loading : false,
     likeorUnlikeloading : false,
+    addcommentloading: false,
 }
 
 export const alertsReducer = (state=initialState, action) =>{
@@ -15,7 +16,11 @@ export const alertsReducer = (state=initialState, action) =>{
             ...state,
             likeorUnlikeloading: action.payload
         }
-
+        
+        case 'ADD_COMMENT_LOADING': return {
+            ...state,
+            addcommentloading: action.payload
+        }
         default : return state
     }
 

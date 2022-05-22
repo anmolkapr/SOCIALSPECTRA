@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import { Link } from 'react-router-dom';
 import moment from "moment"
 import {
@@ -7,8 +7,10 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { getallposts, likeorUnlikePost } from '../redux/actions/postActions';
+import { getallposts, likeorUnlikePost, addComment } from '../redux/actions/postActions';
 import { useDispatch, useSelector } from 'react-redux';
+import {Modal, Row, Col, Input} from'antd'
+const { TextArea } = Input;
 
 function Post({ post }) {
   const dispatch = useDispatch();
@@ -17,6 +19,8 @@ function Post({ post }) {
       (obj) => obj.user.toString() == currentuser._id
     );
   const { likeorUnlikeloading } = useSelector((state)=>state.alertsReducer);
+  const [commentModalVisibility, setCommentModalVisibility] = useState(false);
+  const [comment, setComment] = useState("");
   
   useEffect(() => {
     
@@ -49,27 +53,61 @@ function Post({ post }) {
           <p>{moment(post.createdAt).format("DD MMM yyyy")}</p>
         </div>
       </div>
-      <img
-        src={post.image}
-        className="postimage w-100"
-      />
+      <img src={post.image} className="postimage w-100" />
 
       <p className="mt1 mb-1 text-left">{post.description}</p>
 
-      <div className='d-flex align-items-center'>
-          <div className='d-flex align-items-center mr-3'>
+      <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center mr-3">
           <HeartFilled
-            style={{color: alreadyLiked ? 'red' : 'grey'}}
-            onClick={() => { dispatch(likeorUnlikePost({ postid: post._id })) }} />
-               
-              <p>{post.likes.length}</p>
-          </div>
+            style={{ color: alreadyLiked ? "red" : "grey" }}
+            onClick={() => {
+              dispatch(likeorUnlikePost({ postid: post._id }));
+            }}
+          />
 
-          <div className='d-flex align-items-center'>
-              <CommentOutlined />
-              <p>{post.comments.length}</p>
-          </div>
-          </div>
+          <p>{post.likes.length}</p>
+        </div>
+
+        <div className="d-flex align-items-center">
+          <CommentOutlined
+            onClick={() => {
+              setCommentModalVisibility(true);
+            }}
+          />
+          <p>{post.comments.length}</p>
+        </div>
+      </div>
+      <Modal
+        visible={commentModalVisibility}
+        title="Comments"
+        closable={false}
+        width={900}
+        okText="Add Comment"
+        onOk={() => {
+          dispatch(addComment({ postid: post._id, comment: comment }));
+          setCommentModalVisibility(false);
+        }}
+        onCancel={() => {
+          setCommentModalVisibility(false);
+        }}
+      >
+         <Row>
+          <Col lg={13} xs={0}>
+            <img src={post.image} height="400" className="w-100" />
+          </Col>
+          <Col lg={11} xs={24}>
+            <TextArea
+              placeholder="Add your Comment here"
+              className="ml-2"
+              value={comment}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+            />
+            </Col>
+        </Row>
+      </Modal>
     </div>
   );
 }
