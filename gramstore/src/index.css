@@ -69,3 +69,15 @@ p{
 .anticon svg {
   font-size: 18px !important;
 }
+
+.profilepic2{
+  height: 50px !important;
+  width: 50px !important;
+  text-transform: uppercase;
+  border-radius: 50%;
+  background-color: grey !important;
+  text-align: center !important;
+  font-size : 35px !important;
+  font-weight: bold !important;
+  color: white !important;
+}
