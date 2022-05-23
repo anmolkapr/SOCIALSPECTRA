@@ -10,7 +10,7 @@ import Register from './pages/Register';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getallposts } from './redux/actions/postActions';
-
+import { getAllUsers } from "./redux/actions/userActions";
 
 function App() {
   const { loading, likeorUnlikeloading } = useSelector(
@@ -20,6 +20,7 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(getAllUsers());
     dispatch(getallposts())
   },[])
 

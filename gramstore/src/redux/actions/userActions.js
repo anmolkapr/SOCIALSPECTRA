@@ -33,3 +33,17 @@ export const userLogin = (values) => async dispatch => {
     message.error("Invalid credentials");
   }
 };
+
+export const getAllUsers = (values) => async dispatch => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    const response = await axios.get("/api/users/getallusers");
+    dispatch({ type: "LOADING", payload: false });
+    dispatch({ type: "GET_ALL_USERS", payload: response.data });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "LOADING", payload: false });
+    message.error("something went wrong");
+  }
+};

@@ -14,22 +14,22 @@ const { TextArea } = Input;
 
 function Post({ post }) {
   const dispatch = useDispatch();
-    const currentuser = JSON.parse(localStorage.getItem("user"));
-    const alreadyLiked = post.likes.find(
-      (obj) => obj.user.toString() == currentuser._id
-    );
-  const { likeorUnlikeloading } = useSelector((state)=>state.alertsReducer);
+  const currentuser = JSON.parse(localStorage.getItem("user"));
+  const alreadyLiked = post.likes.find(
+    (obj) => obj.user.toString() == currentuser._id
+  );
+  const { likeorUnlikeloading, addcommentloading } = useSelector(
+    (state) => state.alertsReducer
+  );
   const [commentModalVisibility, setCommentModalVisibility] = useState(false);
   const [comment, setComment] = useState("");
-  
+  const { users } = useSelector((state) => state.usersReducer);
+
   useEffect(() => {
-    
-    dispatch(getallposts())
-    
-  },[likeorUnlikeloading])
+    dispatch(getallposts());
+  }, [likeorUnlikeloading, addcommentloading]);
   //if the value in the second argument is changed then the first function is executed
-  
-  
+
   return (
     <div className="bs1 p-2 mt-3">
       <div className="d-flex justify-content-between align-items-center">
@@ -92,7 +92,7 @@ function Post({ post }) {
           setCommentModalVisibility(false);
         }}
       >
-         <Row>
+        <Row>
           <Col lg={13} xs={0}>
             <img src={post.image} height="400" className="w-100" />
           </Col>
@@ -105,11 +105,45 @@ function Post({ post }) {
                 setComment(e.target.value);
               }}
             />
-            </Col>
+            {post.comments.map((comment) => {
+              const user = users.find((obj) => obj._id == comment.user);
+              console.log(user);
+              return (
+                <div className="d-flex align-items-center m-1 p-1 justify-content-between">
+                  <div className="d-flex align-items-center ">
+                    {user.profilePicUrl == "" ? (
+                      <span className="profilepic1 d-flex align-items-center">
+                        {user.username[0]}
+                      </span>
+                    ) : (
+                      <img
+                        src={post.user.profilePicUrl}
+                        height="35"
+                        width="35"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    )}
+                    <Link
+                      className="ml-1"
+                      style={{ fontSize: 15, marginLeft: 10 }}
+                    >
+                      {user.username}
+                    </Link>
+                    <p style={{ fontSize: 15 }}>{comment.comment}</p>
+                  </div>
+                  <div className="text-right d-flex">
+                    <p style={{ fontSize: 13 }} className="text-right">
+                      {comment.date}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </Col>
         </Row>
       </Modal>
     </div>
   );
 }
 
-export default Post
+export default Post;
