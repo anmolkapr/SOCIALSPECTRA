@@ -62,3 +62,17 @@ export const followUser = (values) => async dispatch => {
     message.error("something went wrong");
   }
 };
+
+export const unfollowUser = (values) => async dispatch => {
+  dispatch({ type: "UNFOLLOW_LOADING", payload: true });
+
+  try {
+    const response = await axios.post("/api/users/unfollowuser", values);
+    dispatch({ type: "UNFOLLOW_LOADING", payload: false });
+    message.success("Unfollowed Successfully");
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "UNFOLLOW_LOADING", payload: false });
+    message.error("something went wrong");
+  }
+};

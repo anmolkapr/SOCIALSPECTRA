@@ -75,4 +75,29 @@ router.post("/followuser", async (req, res) => {
   }
 });
 
+router.post("/unfollowuser", async (req, res) => {
+  const { currentuserid, receiveruserid } = req.body;
+
+  try {
+    var currentuser = await User.findOne({ _id: currentuserid });
+    var currentUserFollowing = currentuser.following;
+    const temp = currentUserFollowing.filter((obj)=>obj.toString() !== receiveruserid)
+    currentuser.following = temp;
+
+    await User.updateOne({ _id: currentuserid }, currentuser);
+
+    var receiveruser = await User.findOne({ _id: receiveruserid });
+    var receiverUserFollowers = receiveruser.followers;
+    const temp1 = receiverUserFollowers.filter((obj)=>obj.toString() !== currentuserid)
+    receiveruser.followers = temp1;
+
+    await User.updateOne({ _id: receiveruserid }, receiveruser);
+
+    res.send("UnFollowed Successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
 module.exports = router
