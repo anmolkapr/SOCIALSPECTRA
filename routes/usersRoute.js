@@ -48,4 +48,31 @@ router.get("/getallusers", async(req, res) =>{
     }
 });
 
+router.post("/followuser", async (req, res) => {
+  
+    const {currentuserid, receiveruserid} = req.body
+  
+    try {
+        var currentuser = await User.findOne({ _id: currentuserid })
+        var currentUserFollowing = currentuser.following
+        currentUserFollowing.push(receiveruserid)
+        currentuser.following = currentUserFollowing;
+
+        await User.updateOne({_id: currentuserid}, currentuser)
+
+
+        var receiveruser = await User.findOne({_id: receiveruserid})
+        var receiverUserFollowers = receiveruser.followers
+        receiverUserFollowers.push(currentuserid)
+        receiveruser.followers = receiverUserFollowers;
+
+        await User.updateOne({ _id: receiveruserid }, receiveruser);
+
+        res.send("Followed Successfully")
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
 module.exports = router

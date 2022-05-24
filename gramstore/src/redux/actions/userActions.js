@@ -47,3 +47,18 @@ export const getAllUsers = (values) => async dispatch => {
     message.error("something went wrong");
   }
 };
+
+export const followUser = (values) => async dispatch => {
+  dispatch({ type: "FOLLOW_LOADING", payload: true });
+
+  try {
+    const response = await axios.post("/api/users/followuser", values);
+    dispatch({ type: "FOLLOW_LOADING", payload: false });
+    message.success("Followed Successfully");
+    
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "FOLLOW_LOADING", payload: false });
+    message.error("something went wrong");
+  }
+};
