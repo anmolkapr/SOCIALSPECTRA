@@ -8,6 +8,7 @@ import 'antd/dist/antd.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AllUsers from './pages/AllUsers';
+import Editprofile from "./pages/Editprofile";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getallposts } from './redux/actions/postActions';
@@ -38,7 +39,7 @@ function App() {
         <Route path="/register" exact component={Register}></Route>
         <ProtectedRoute path="/" exact component={Home}></ProtectedRoute>
         <ProtectedRoute
-          path="/profile"
+          path="/profile/:userid"
           exact
           component={Profile}
         ></ProtectedRoute>
@@ -51,6 +52,11 @@ function App() {
           path="/allusers"
           exact
           component={AllUsers}
+        ></ProtectedRoute>
+        <ProtectedRoute
+          path="/editprofile"
+          exact
+          component={Editprofile}
         ></ProtectedRoute>
       </BrowserRouter>
     </div>

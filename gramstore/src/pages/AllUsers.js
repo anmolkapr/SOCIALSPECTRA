@@ -52,7 +52,7 @@ function AllUsers() {
                           />
                         )}
                         <div>
-                          <Link to={`/profile`}>{user.username}</Link>
+                          <Link to={`/profile/${user._id}`}>{user.username}</Link>
                         </div>
                         <p>{moment(user.createdAt).format("MMM DD yyyy")}</p>
                         {user.followers.find(

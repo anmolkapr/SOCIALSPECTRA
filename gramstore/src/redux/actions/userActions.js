@@ -76,3 +76,21 @@ export const unfollowUser = (values) => async dispatch => {
     message.error("something went wrong");
   }
 };
+
+export const editUser = (values) => async dispatch => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    const response = await axios.post("/api/users/edit", values);
+    dispatch({ type: "LOADING", payload: false });
+    message.success("User profile updated successfully");
+
+    localStorage.setItem('user', JSON.stringify(response.data))
+    window.location.href = `/profile/${response.data._id}`;
+  }
+  catch (error) {
+    console.log(error);
+    dispatch({ type: "LOADING", payload: false });
+    message.error("something went wrong");
+  }
+};

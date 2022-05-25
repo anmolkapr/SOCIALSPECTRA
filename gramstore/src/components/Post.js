@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {Modal, Row, Col, Input} from'antd'
 const { TextArea } = Input;
 
-function Post({ post }) {
+function Post({ post, postInProfilePage }) {
   const dispatch = useDispatch();
   const currentuser = JSON.parse(localStorage.getItem("user"));
   const alreadyLiked = post.likes.find(
@@ -47,17 +47,29 @@ function Post({ post }) {
               style={{ borderRadius: "50%" }}
             />
           )}
-          <Link className="ml-2">{post.user.username}</Link>
+          <Link className="ml-2" to={`/profile/${post.user._id}`}>
+            {post.user.username}
+          </Link>
         </div>
         <div className="semibold(600)">
           <p>{moment(post.createdAt).format("DD MMM yyyy")}</p>
         </div>
       </div>
-      <img src={post.image} className="postimage w-100" />
+      <img
+        src={post.image}
+        style={{ height: postInProfilePage == true ? "200px" : "500px" }}
+        className="w-100"
+      />
 
       <p className="mt1 mb-1 text-left">{post.description}</p>
 
-      <div className="d-flex align-items-center">
+      <div
+        className={
+          postInProfilePage
+            ? "d-flex align-items-center justify-content-between"
+            : "d-flex align-items-center"
+        }
+      >
         <div className="d-flex align-items-center mr-3">
           <HeartFilled
             style={{ color: alreadyLiked ? "red" : "grey" }}
@@ -77,6 +89,16 @@ function Post({ post }) {
           />
           <p>{post.comments.length}</p>
         </div>
+        {post.user._id == currentuser._id && postInProfilePage == true && (
+          <>
+            <div>
+              <DeleteOutlined />
+            </div>
+            <div>
+              <EditOutlined />
+            </div>
+          </>
+        )}
       </div>
       <Modal
         visible={commentModalVisibility}
@@ -126,6 +148,7 @@ function Post({ post }) {
                     <Link
                       className="ml-1"
                       style={{ fontSize: 15, marginLeft: 10 }}
+                      to={`/profile/${post.user._id}`}
                     >
                       {user.username}
                     </Link>

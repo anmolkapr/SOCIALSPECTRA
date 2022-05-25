@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/userModel");
+const { cloudinary } = require("../cloudinary");
 
 router.post("/register", async (req, res) => {
     try {
@@ -98,6 +99,37 @@ router.post("/unfollowuser", async (req, res) => {
     console.log(error);
     return res.status(400).json(error);
   }
+});
+
+router.post("/edit", async (req, res) => {
+     
+    try{
+        var prevUser = await User.findOne({_id: req.body._id})
+        if (prevUser.profilePicUrl == req.body.profilePicUrl) {
+            await User.updateOne({ _id: req.body._id }, req.body)
+            //updates the other data
+            // no need to call cloudinary
+
+            const updatedUser = await User.findOne({_id:req.body._id})
+            res.send(updatedUser)
+        }
+        else {
+            const uploadResponse = await cloudinary.v2.uploader.upload(req.body.profilePicUrl, {
+                folder: "socialspectra",
+                use_filename: true,
+              });
+          
+            req.body.profilePicUrl = uploadResponse.url;
+            await User.updateOne({ _id: req.body._id }, req.body)
+            const updatedUser = await User.findOne({_id:req.body._id})
+            res.send(updatedUser);
+            // store in the local storage
+        }
+    }
+    catch (error) {
+        console.log(error)
+        return res.status(400).json(error);
+    }
 });
 
 module.exports = router
