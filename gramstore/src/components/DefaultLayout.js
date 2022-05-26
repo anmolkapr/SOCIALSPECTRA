@@ -66,7 +66,7 @@ class DefaultLayout extends React.Component {
               <Link to={`/profile/${user._id}`}>Profile Page </Link>
             </Menu.Item>
             <Menu.Item key="/addpost" icon={<PlusOutlined />}>
-              <Link to="/addpost">Add a post </Link>
+              <Link to="/addpost">Add a posst </Link>
             </Menu.Item>
 
             <Menu.Item key="/allusers" icon={<UsergroupDeleteOutlined />}>

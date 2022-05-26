@@ -74,3 +74,19 @@ export const addComment= (values) => async dispatch => {
     message.error("Something Went Wrong");
   }
 };
+
+export const editPost = (values) => async (dispatch) => {
+
+  dispatch({ type: "EDIT_POST_LOADING", payload: true });
+
+  try {
+
+    await axios.post("/api/posts/editpost", values);
+    dispatch({ type: "EDIT_POST_LOADING", payload: false });
+    message.success("Post Updated Successfully");
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "EDIT_POST_LOADING", payload: false });
+    message.error("Something Went Wrong");
+  }
+};

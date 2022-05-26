@@ -13,7 +13,7 @@ function Profile({match}) {
   const currentuser = JSON.parse(localStorage.getItem('user'))
   const user = users.find((obj) => obj._id == match.params.userid)
   // find is used as we are not searching from the mongo database
-  const usersposts = posts.filter((obj)=>obj.user._id == match.params.userid)
+  const usersposts = posts.filter((obj) => obj.user._id == match.params.userid)
 
   return (
     <DefaultLayout>
@@ -68,7 +68,7 @@ function Profile({match}) {
           {(currentuser._id == user._id ||
             user.privateAccount == false ||
             (user.followers.find((obj) => obj == currentuser._id)) ? (
-              <Row>
+              <Row gutter={16} justify="center">
                 {usersposts.map((post) => {
                   return (
                     <Col lg={7} sm={24} xs={24}>

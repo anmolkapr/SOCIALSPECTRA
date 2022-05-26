@@ -1,15 +1,20 @@
-import React, { useEffect,useState } from 'react'
-import { Link } from 'react-router-dom';
-import moment from "moment"
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 import {
-    HeartFilled,
+  HeartFilled,
   CommentOutlined,
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { getallposts, likeorUnlikePost, addComment } from '../redux/actions/postActions';
-import { useDispatch, useSelector } from 'react-redux';
-import {Modal, Row, Col, Input} from'antd'
+import {
+  getallposts,
+  likeorUnlikePost,
+  addComment,
+  editPost,
+} from "../redux/actions/postActions";
+import { useDispatch, useSelector } from "react-redux";
+import { Modal, Row, Col, Input } from "antd";
 const { TextArea } = Input;
 
 function Post({ post, postInProfilePage }) {
@@ -18,16 +23,18 @@ function Post({ post, postInProfilePage }) {
   const alreadyLiked = post.likes.find(
     (obj) => obj.user.toString() == currentuser._id
   );
-  const { likeorUnlikeloading, addcommentloading } = useSelector(
+  const { likeorUnlikeloading, addcommentloading, editPostLoading } = useSelector(
     (state) => state.alertsReducer
   );
   const [commentModalVisibility, setCommentModalVisibility] = useState(false);
+  const [editModalVisibility, setEditModalVisibility] = useState(false);
   const [comment, setComment] = useState("");
+  const [description, setdescription] = useState(post.description);
   const { users } = useSelector((state) => state.usersReducer);
 
   useEffect(() => {
     dispatch(getallposts());
-  }, [likeorUnlikeloading, addcommentloading]);
+  }, [likeorUnlikeloading, addcommentloading, editPostLoading]);
   //if the value in the second argument is changed then the first function is executed
 
   return (
@@ -95,7 +102,11 @@ function Post({ post, postInProfilePage }) {
               <DeleteOutlined />
             </div>
             <div>
-              <EditOutlined />
+              <EditOutlined
+                onClick={() => {
+                  setEditModalVisibility(true);
+                }}
+              />
             </div>
           </>
         )}
@@ -165,6 +176,28 @@ function Post({ post, postInProfilePage }) {
           </Col>
         </Row>
       </Modal>
+
+      <Modal
+        title="Edit Description"
+        closable={false}
+        okText="Edit"
+        visible={editModalVisibility}
+        onOk={() => {
+          dispatch(editPost({_id: post._id, description: description}))
+          setEditModalVisibility(false)
+        }}
+        onCancel={() => {
+          setEditModalVisibility(false);
+        }}
+      >
+        <Input
+          value={description}
+          onChange={(e) => {
+            setdescription(e.target.value)
+          }}
+        />
+      </Modal>
+       
     </div>
   );
 }
