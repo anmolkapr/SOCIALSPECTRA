@@ -1,22 +1,37 @@
 import { Col, Row, Button, Modal } from 'antd'
 import { Link } from "react-router-dom";
-import React, { useState } from 'react'
-import {useSelector} from 'react-redux'
+import React, { useState ,useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import DefaultLayout from '../components/DefaultLayout'
 import Post from "../components/Post";
+import { followUser, getAllUsers, unfollowUser } from '../redux/actions/userActions';
+import {
+  UserAddOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
 const moment = require("moment")
 
 
 function Profile({match}) {
+  const dispatch= useDispatch()
   const { users } = useSelector((state) => state.usersReducer)
   const {posts} = useSelector((state)=>state.postsReducer)
   const currentuser = JSON.parse(localStorage.getItem('user'))
   const user = users.find((obj) => obj._id == match.params.userid)
+  const { followLoading, unfollowLoading } = useSelector(
+    (state) => state.alertsReducer
+);
   // find is used as we are not searching from the mongo database
   const usersposts = posts.filter((obj) => obj.user._id == match.params.userid)
+  
 
   const [followersModalDisplay, setfollowersModalDisplay] = useState(false);
   const [followingModalDisplay, setfollowingModalDisplay] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [followLoading, unfollowLoading]);
+
   return (
     <DefaultLayout>
       {users.length > 0 && (
@@ -132,6 +147,42 @@ function Profile({match}) {
                       {moment(followeruser.createdAt).format("MMM DD yyyy")}
                     </div>
                   </div>
+                  {(followeruser._id != currentuser._id) && (followeruser.followers.find(
+                    (obj) => obj == currentuser._id
+                  ) ? (
+                    <div className="d-flex">
+                      <Button className="" icon={<CheckOutlined />}>
+                        Following
+                      </Button>
+                      <Button
+                        className="ml-1"
+                        onClick={() => {
+                          dispatch(
+                            unfollowUser({
+                              currentuserid: currentuser._id,
+                              receiveruserid: followeruser._id,
+                            })
+                          );
+                        }}
+                      >
+                        UnFollow
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      icon={<UserAddOutlined />}
+                      onClick={() => {
+                        dispatch(
+                          followUser({
+                            currentuserid: currentuser._id,
+                            receiveruserid: followeruser._id,
+                          })
+                        );
+                      }}
+                    >
+                      Follow
+                    </Button>
+                  ))}
                 </div>
               );
             })}
@@ -175,6 +226,44 @@ function Profile({match}) {
                       {moment(followinguser.createdAt).format("MMM DD yyyy")}
                     </div>
                   </div>
+
+                  {(followinguser._id != currentuser._id) &&
+                  (followinguser.followers.find(
+                    (obj) => obj == currentuser._id
+                  ) ? (
+                    <div className="d-flex">
+                      <Button className="" icon={<CheckOutlined />}>
+                        Following
+                      </Button>
+                      <Button
+                        className="ml-1"
+                        onClick={() => {
+                          dispatch(
+                            unfollowUser({
+                              currentuserid: currentuser._id,
+                              receiveruserid: followinguser._id,
+                            })
+                          );
+                        }}
+                      >
+                        UnFollow
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      icon={<UserAddOutlined />}
+                      onClick={() => {
+                        dispatch(
+                          followUser({
+                            currentuserid: currentuser._id,
+                            receiveruserid: followinguser._id,
+                          })
+                        );
+                      }}
+                    >
+                      Follow
+                    </Button>
+                  ))}
                 </div>
               );
             })}
