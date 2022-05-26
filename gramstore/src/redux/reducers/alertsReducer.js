@@ -5,6 +5,7 @@ const initialState = {
   followLoading: false,
   unfollowLoading: false,
   editPostLoading: false,
+  deletePostLoading: false,
 };
 
 export const alertsReducer = (state = initialState, action) => {
@@ -43,6 +44,12 @@ export const alertsReducer = (state = initialState, action) => {
       return {
         ...state,
         editPostLoading: action.payload,
+      };
+
+    case "DELETE_POST_LOADING":
+      return {
+        ...state,
+        deletePostLoading: action.payload,
       };
 
     default:

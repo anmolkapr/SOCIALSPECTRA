@@ -5,10 +5,25 @@ export const userRegister = (values) => async dispatch => {
   dispatch({ type: "LOADING", payload: true });
 
   try {
-    await axios.post("/api/users/register", values);
-    dispatch({ type: "LOADING", payload: false });
-    message.success("User registered successfully");
-    window.location.href = "../login";
+    // console.log(values)
+    if (values.cpassword !== values.password) {
+      dispatch({ type: "LOADING", payload: false });
+      message.error("Confirm password does not match Password!");
+    }
+    else
+    {
+      delete values.cpassword;
+    
+      const response = await axios.post("/api/users/register", values);
+      dispatch({ type: "LOADING", payload: false });
+      // console.log(response)
+      if (response.data ==  "User already registered") {
+        message.error("Username already taken!");
+      } else {
+        message.success("User registered successfully");
+        window.location.href = "/login";
+      }
+    }
   } catch (error) {
     console.log(error);
     dispatch({ type: "LOADING", payload: false });
@@ -22,12 +37,22 @@ export const userLogin = (values) => async dispatch => {
 
   try {
     const response = await axios.post("/api/users/login", values);
+    console.log(response)
     dispatch({ type: "LOADING", payload: false });
-    message.success("Login success");
-    console.log(response);
-    localStorage.setItem("user", JSON.stringify(response.data));
-    window.location.href = "/";
-  } catch (error) {
+    if (response.data == "Invalid credentials")
+    {
+      message.error("Invalid Credentials !");
+      // window.location.href = "/login";
+    }
+    else
+    {
+      message.success("Login success");
+      console.log(response);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.href = "/";
+    }
+  } 
+  catch (error) {
     console.log(error);
     dispatch({ type: "LOADING", payload: false });
     message.error("Invalid credentials");

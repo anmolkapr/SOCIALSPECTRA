@@ -16,6 +16,7 @@ export const addPost = (values) => async dispatch => {
     await axios.post("/api/posts/addpost", values);
     dispatch({ type: "LOADING", payload: false });
     message.success("Post Added Successfully");
+    window.location.href='/'
     
   } catch (error) {
     console.log(error);
@@ -24,7 +25,7 @@ export const addPost = (values) => async dispatch => {
   }
 };
 
-export const getallposts = () => async (dispatch) => {
+export const getallposts = () => async dispatch => {
   dispatch({ type: "LOADING", payload: true });
 
   try {
@@ -75,7 +76,7 @@ export const addComment= (values) => async dispatch => {
   }
 };
 
-export const editPost = (values) => async (dispatch) => {
+export const editPost = (values) => async dispatch => {
 
   dispatch({ type: "EDIT_POST_LOADING", payload: true });
 
@@ -87,6 +88,20 @@ export const editPost = (values) => async (dispatch) => {
   } catch (error) {
     console.log(error);
     dispatch({ type: "EDIT_POST_LOADING", payload: false });
+    message.error("Something Went Wrong");
+  }
+};
+
+export const deletePost = (values) => async dispatch => {
+  dispatch({ type: "DELETE_POST_LOADING", payload: true });
+
+  try {
+    await axios.post("/api/posts/deletepost", values);
+    dispatch({ type: "DELETE_POST_LOADING", payload: false });
+    message.success("Post Deleted Successfully");
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "DELETE_POST_LOADING", payload: false });
     message.error("Something Went Wrong");
   }
 };

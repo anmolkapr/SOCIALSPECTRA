@@ -100,4 +100,15 @@ router.post("/editpost", async (req, res) => {
   }
 });
 
+router.post("/deletepost", async (req, res) => {
+  try {
+    await Post.deleteOne({ _id: req.body._id });
+
+    res.send("Post Deleted successfully");
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
 module.exports = router

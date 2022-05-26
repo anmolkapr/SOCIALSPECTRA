@@ -8,8 +8,8 @@ import { userRegister } from '../redux/actions/userActions'
 function Register () {
   const dispatch = useDispatch();
   function register(values){
-    console.log(values)
-    delete values.cpassword
+    // console.log(values)
+    // delete values.cpassword
     dispatch(userRegister(values))    
   }
   

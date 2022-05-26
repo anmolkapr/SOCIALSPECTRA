@@ -6,12 +6,12 @@ const { cloudinary } = require("../cloudinary");
 router.post("/register", async (req, res) => {
     try {
         
-        const newuser = new User(req.body)
         //Checking if user already exists
         const user1 = await User.findOne({username:req.body.username});
         if(user1){
-            res.send(`${newuser.username} Already registered`)
+           return res.send("User already registered")
         }
+        const newuser = new User(req.body);
         await newuser.save()
         res.send(`${newuser.username} registered Successfully`)
     } catch (error) {
@@ -27,12 +27,12 @@ router.post("/login",async(req,res)=>{
         if (user)
          { //res.send(`${user.username} Logged in successfully`)
             if(await user.matchPassword(req.body.password)){
-                res.send(user);
+                return res.send(user);
             }else{
-               return res.send("Invalid password")
+               return res.send("Invalid credentials");
             }           
        } else
-            res.send("Invalid credentials")
+            return res.send("Invalid credentials")
     } catch (error) {
         console.log(error);
         return res.json(400).json(error);

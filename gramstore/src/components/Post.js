@@ -12,6 +12,7 @@ import {
   likeorUnlikePost,
   addComment,
   editPost,
+  deletePost
 } from "../redux/actions/postActions";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Row, Col, Input } from "antd";
@@ -23,9 +24,12 @@ function Post({ post, postInProfilePage }) {
   const alreadyLiked = post.likes.find(
     (obj) => obj.user.toString() == currentuser._id
   );
-  const { likeorUnlikeloading, addcommentloading, editPostLoading } = useSelector(
-    (state) => state.alertsReducer
-  );
+  const {
+    likeorUnlikeloading,
+    addcommentloading,
+    editPostLoading,
+    deletePostLoading,
+  } = useSelector((state) => state.alertsReducer);
   const [commentModalVisibility, setCommentModalVisibility] = useState(false);
   const [editModalVisibility, setEditModalVisibility] = useState(false);
   const [comment, setComment] = useState("");
@@ -34,9 +38,9 @@ function Post({ post, postInProfilePage }) {
 
   useEffect(() => {
     dispatch(getallposts());
-  }, [likeorUnlikeloading, addcommentloading, editPostLoading]);
+  }, [likeorUnlikeloading, addcommentloading, editPostLoading, deletePostLoading]);
   //if the value in the second argument is changed then the first function is executed
-
+  
   return (
     <div className="bs1 p-2 mt-3">
       <div className="d-flex justify-content-between align-items-center">
@@ -99,7 +103,10 @@ function Post({ post, postInProfilePage }) {
         {post.user._id == currentuser._id && postInProfilePage == true && (
           <>
             <div>
-              <DeleteOutlined />
+              <DeleteOutlined
+                onClick={() => {
+                  dispatch(deletePost({_id:post._id}))
+              }}/>
             </div>
             <div>
               <EditOutlined
@@ -140,7 +147,7 @@ function Post({ post, postInProfilePage }) {
             />
             {post.comments.map((comment) => {
               const user = users.find((obj) => obj._id == comment.user);
-              console.log(user);
+              // console.log(user);
               return (
                 <div className="d-flex align-items-center m-1 p-1 justify-content-between">
                   <div className="d-flex align-items-center ">
