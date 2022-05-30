@@ -15,8 +15,11 @@ function Login () {
   }
 
   return (
-    <div>
-      <Row justify="center" className="register-div">
+    <div className="login-maindiv">
+      <Row justify="center" className="register-div align-items-center">
+        <Col lg={5} sm={24} xs={24}>
+          <h1 className="left-title">Social</h1>
+        </Col>
         <Col lg={10} xs={24}>
           <Form layout="vertical" className="bs1 p-3" onFinish={login}>
             <h3>Login</h3>
@@ -34,7 +37,7 @@ function Login () {
               name="password"
               rules={[{ required: true }]}
             >
-              <Input />
+              <Input type="password"/>
             </Form.Item>
 
             <div className="text-left">
@@ -43,8 +46,13 @@ function Login () {
               </Button>
             </div>
 
-            <Link to="/register">Not yet registered, Click here to register.</Link>
+            <Link to="/register">
+              Not yet registered, Click here to register.
+            </Link>
           </Form>
+        </Col>
+        <Col lg={5} sm={24} xs={24}>
+          <h1 className="right-title">Spectra</h1>
         </Col>
       </Row>
     </div>

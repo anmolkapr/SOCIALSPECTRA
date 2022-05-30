@@ -68,8 +68,8 @@ function Post({ post, postInProfilePage }) {
       </div>
       <img
         src={post.image}
-        style={{ height: postInProfilePage == true ? "200px" : "500px" }}
-        className="w-100"
+        style={{ height: postInProfilePage == true && "200px"}}
+        className="w-100 postimage"
       />
 
       <p className="mt1 mb-1 text-left">{post.description}</p>

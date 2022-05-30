@@ -27,8 +27,8 @@ function AllUsers() {
     <DefaultLayout>
       <div>
         <Row justify="center">
-          <Col lg={20} className="d-flex">
-            <Input style={{ width: "60%" } }
+          <Col lg={20} className="d-flex mt-5">
+            <Input className='search users'
             placeholder='Search Users' value={searchKey} onChange={(e)=>setSearchKey(e.target.value)}
             ></Input>
           </Col>

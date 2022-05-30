@@ -21,7 +21,7 @@ const { Header, Sider, Content } = Layout;
 
 class DefaultLayout extends React.Component {
   state = {
-    collapsed: false,
+    collapsed: true,
   };
 
   toggle = () => {
@@ -36,10 +36,27 @@ class DefaultLayout extends React.Component {
     return (
       <Layout>
         <Layout className="site-layout">
-          <Header className="site-layout-background " style={{ padding: 0 }}>
+          <Header
+            className="site-layout-background "
+            style={{
+              position: "sticky",
+              top: 0,
+              width: "100%",
+              left: 0,
+              padding: 0,
+              zIndex: 9999,
+            }}
+          >
             <div className="d-flex justify-content-between align-items-center bs1">
-              <h4>{JSON.parse(localStorage.getItem("user")).username}</h4>
-              <h2>Gram Store </h2>
+              <div className="d-flex align-items-center">
+                <UserOutlined />
+                <h4 className="pt-3">
+                  {JSON.parse(localStorage.getItem("user")).username}
+                </h4>
+              </div>
+              <h2 className="logotext pt-1">
+                <b>SocialSpectra</b>{" "}
+              </h2>
               {React.createElement(
                 this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
                 {
@@ -53,7 +70,18 @@ class DefaultLayout extends React.Component {
             {this.props.children}
           </Content>
         </Layout>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={this.state.collapsed}
+          style={{
+            position: "sticky",
+            top: 0,
+            bottom: 0,
+            overflow: "auto",
+            height: "100vh",
+          }}
+        >
           <div className="logo" />
           <Menu
             theme="dark"

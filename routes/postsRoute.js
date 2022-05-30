@@ -31,7 +31,7 @@ router.get("/getallposts", async(req, res) =>{
     try{
       // populate is basically filling another schema data in one schema 
       // here filling user schema data in post schema
-        const posts = await Post.find().populate('user')
+        const posts = await Post.find().populate('user').sort({createdAt: -1}).exec()
         res.send(posts)
     }
     catch (error) {
