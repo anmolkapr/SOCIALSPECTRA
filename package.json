@@ -3,8 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines" : {
+    "node": "16.14.0",
+    "npm" : "8.3.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client-install": "npm install --prefix gramstore",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix gramstore",
+    "dev": "concurrently \"npm run server\" \"npm run gramstore\"",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix gramstore && npm run build --prefix gramstore"
   },
   "author": "",
   "license": "ISC",
