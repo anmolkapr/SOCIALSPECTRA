@@ -19,7 +19,7 @@ function Register () {
         <Col lg={5} sm={24} xs={24}>
           <h1 className="left-title">Social</h1>
         </Col>
-        <Col lg={10} xs={24}>
+        <Col lg={8} xs={24}>
           <Form layout="vertical" className="bs1 p-3" onFinish={register}>
             <h3>Register</h3>
             <hr />

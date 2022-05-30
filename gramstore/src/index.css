@@ -92,12 +92,12 @@ p{
 .register-maindiv {
   min-height: 100vh !important;
 
-  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  background-image: url('MicrosoftTeams-image.png');
 }
 
 .login-maindiv {
   min-height: 100vh !important;
-  background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  background-image: url('MicrosoftTeams-image.png');
 }
 
 form {
@@ -119,7 +119,7 @@ form {
   border-bottom: 10px solid white;
   border-color: yellow;
   color: white;
-  width: 340px
+  width: 360px
 }
 
 @media only screen and (max-width : 500px) {
